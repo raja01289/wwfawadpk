@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fawad Sports | Online Sports Store</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#f5f5f5;color:#171717}
+header{background:#111;color:white;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.logo{font-size:25px;font-weight:900;letter-spacing:1px}
+nav{display:flex;gap:15px;align-items:center;flex-wrap:wrap}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:0;padding:11px 16px;font-weight:bold;border-radius:5px}
+.hero{background:#171717;color:white;padding:65px 7%;text-align:center}
+.hero h1{font-size:clamp(35px,7vw,65px);margin:0 0 15px}
+.hero p{color:#ddd;font-size:17px}
+.primary{background:white;color:#111;margin-top:12px}
+.container{padding:35px 6%;max-width:1300px;margin:auto}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px;margin-top:20px}
+.card{background:white;border-radius:10px;overflow:hidden;box-shadow:0 2px 10px #00000010}
+.product-image{height:180px;background:#e9e9e9;display:flex;align-items:center;justify-content:center;font-size:65px;overflow:hidden}
+.product-image img{width:100%;height:100%;object-fit:cover;display:block}
+#imagePreview{display:none;width:140px;height:110px;object-fit:cover;border-radius:8px;margin:8px 0;border:1px solid #ddd}
+.card-content{padding:16px}
+.card h3{margin:5px 0 10px}
+.price{font-weight:bold;font-size:20px;margin:12px 0}
+.add{background:#111;color:white;width:100%}
+.add:hover{background:#444}
+.panel{background:white;padding:20px;border-radius:10px;margin:20px 0}
+input,select{padding:12px;border:1px solid #ccc;border-radius:5px;width:100%;margin:7px 0;font:inherit}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row>*{flex:1;min-width:120px}
+.cart-item{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid #ddd}
+.small{background:#eee;color:#111}
+.danger{background:#a21d1d;color:white}
+.hidden{display:none}
+footer{background:#111;color:white;text-align:center;padding:28px 15px;margin-top:35px}
+.whatsapp{display:inline-block;background:#168b49;color:white;padding:13px 18px;border-radius:6px;font-weight:bold;margin:8px 0}
+.note{color:#666;font-size:13px;line-height:1.5}
+</style>
+</head>
+<body>
+<header>
+  <a class="logo" href="#">FAWAD SPORTS</a>
+  <nav>
+    <a href="#products">Products</a>
+    <a href="#cart">Cart (<span id="count">0</span>)</a>
+    <a href="#contact">Contact</a>
+    <button class="primary" onclick="adminLogin()">Admin Login</button>
+  </nav>
+</header>
+
+<section class="hero">
+  <p>WELCOME TO FAWAD SPORTS</p>
+  <h1>GEAR UP. PLAY HARD.</h1>
+  <p>Football, cricket, sportswear, shoes and more.</p>
+  <a href="#products"><button class="primary">SHOP NOW →</button></a>
+</section>
+
+<main class="container">
+  <section id="products">
+    <div class="section-head">
+      <h2>Our Products</h2>
+      <select id="filter" style="max-width:200px" onchange="renderProducts()">
+        <option value="All">All Categories</option>
+        <option>Football</option><option>Cricket</option>
+        <option>Sportswear</option><option>Shoes</option>
+        <option>Accessories</option>
+      </select>
+    </div>
+    <input id="search" placeholder="Search products..." oninput="renderProducts()">
+    <div class="products" id="productsGrid"></div>
+  </section>
+
+  <section id="cart" class="panel">
+    <h2>🛒 Your Shopping Cart</h2>
+    <div id="cartItems">Your cart is empty.</div>
+    <h3>Total: Rs. <span id="total">0</span></h3>
+    <h3>Checkout Details</h3>
+    <form id="checkout">
+      <input id="customer" placeholder="Your full name" required>
+      <input id="phone" placeholder="Your phone number" required>
+      <input id="address" placeholder="Delivery address" required>
+      <button class="add" type="submit">Place Order on Website</button>
+    </form>
+    <a id="whatsappOrder" class="whatsapp" href="https://wa.me/923405049439" target="_blank" rel="noopener">Order via WhatsApp</a>
+    <p class="note">Website checkout below saves orders only in this browser. WhatsApp opens a message for you to send.</p>
+  </section>
+
+  <section id="admin" class="panel hidden">
+    <h2>Admin Panel</h2>
+    <p class="note">Demo admin panel. Product changes are saved in this browser only.</p>
+    <h3>Add a Product</h3>
+    <form id="addProduct">
+      <input id="pname" placeholder="Product name" required>
+      <div class="row">
+        <input id="pprice" type="number" min="1" placeholder="Price in Rs." required>
+        <select id="pcat">
+          <option>Football</option><option>Cricket</option>
+          <option>Sportswear</option><option>Shoes</option><option>Accessories</option>
+        </select>
+      </div>
+      <label for="pimage"><strong>Product image (JPG, PNG, or WebP; max 1.5 MB)</strong></label>
+      <input id="pimage" type="file" accept="image/jpeg,image/png,image/webp">
+      <img id="imagePreview" alt="Selected product image preview">
+      <input id="pemoji" placeholder="Fallback emoji e.g. ⚽" value="🏆">
+      <p class="note">Note: this HTML-only version saves images in this browser only. For shared, permanent images across devices, connect cloud image storage and a backend.</p>
+      <button type="submit">Add Product</button>
+      <button type="button" class="small" onclick="adminLogout()">Logout</button>
+    </form>
+    <h3>Manage Products</h3>
+    <div id="adminProducts"></div>
+    <h3>Orders on This Browser</h3>
+    <div id="orders"></div>
+  </section>
+
+  <section id="contact" class="panel">
+    <h2>Contact Fawad Sports</h2>
+    <p>WhatsApp / Phone: <strong>03405049439</strong></p>
+    <a class="whatsapp" href="https://wa.me/923405049439" target="_blank" rel="noopener">Chat on WhatsApp</a>
+  </section>
+</main>
+
+<footer>
+  <h2>FAWAD SPORTS</h2>
+  <p>Your Game. Your Gear.</p>
+  <p>© <span id="year"></span> Fawad Sports. All rights reserved.</p>
+</footer>
+
+<script>
+const initialProducts = [
+ {id:1,name:"Football Jersey",price:1800,cat:"Football",emoji:"👕"},
+ {id:2,name:"Football",price:1500,cat:"Football",emoji:"⚽"},
+ {id:3,name:"Cricket Bat",price:3500,cat:"Cricket",emoji:"🏏"},
+ {id:4,name:"Cricket Ball",price:700,cat:"Cricket",emoji:"🔴"},
+ {id:5,name:"Sports Shoes",price:4500,cat:"Shoes",emoji:"👟"},
+ {id:6,name:"Training Tracksuit",price:3800,cat:"Sportswear",emoji:"🥋"},
+ {id:7,name:"Sports Bag",price:2200,cat:"Accessories",emoji:"🎒"},
+ {id:8,name:"Gym Gloves",price:900,cat:"Accessories",emoji:"🧤"}
+];
+function load(key,fallback){
+ try {const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}
+ catch(e){return fallback}
+}
+let products=load("fs_products",initialProducts);
+let cart=load("fs_cart",[]);
+let orders=load("fs_orders",[]);
+const money=n=>Number(n).toLocaleString("en-PK");
+const save=(key,val)=>localStorage.setItem(key,JSON.stringify(val));
+
+function renderProducts(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const cat=document.getElementById("filter").value;
+ const list=products.filter(p=>(cat==="All"||p.cat===cat)&&p.name.toLowerCase().includes(q));
+ document.getElementById("productsGrid").innerHTML=list.map(p=>`
+ <article class="card">
+ <div class="product-image">${p.image?`<img src="${p.image}" alt="${escapeHTML(p.name)}" loading="lazy">`:escapeHTML(p.emoji||"🏆")}</div>
+ <div class="card-content">
+ <small>${escapeHTML(p.cat)}</small>
+ <h3>${escapeHTML(p.name)}</h3>
+ <div class="price">Rs. ${money(p.price)}</div>
+ <button class="add" onclick="addToCart(${p.id})">Add to Cart</button>
+ </div></article>`).join("")||"<p>No products found.</p>";
+}
+function escapeHTML(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function addToCart(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const item=cart.find(x=>x.id===id);
+ if(item)item.qty++;else cart.push({...p,qty:1});
+ save("fs_cart",cart);renderCart();
+}
+function changeQty(id,delta){
+ const item=cart.find(x=>x.id===id);if(!item)return;
+ item.qty+=delta;cart=cart.filter(x=>x.qty>0);
+ save("fs_cart",cart);renderCart();
+}
+function renderCart(){
+ document.getElementById("count").textContent=cart.reduce((s,p)=>s+p.qty,0);
+ document.getElementById("total").textContent=money(cart.reduce((s,p)=>s+p.price*p.qty,0));
+ document.getElementById("cartItems").innerHTML=cart.length?cart.map(p=>`
+ <div class="cart-item"><div>${escapeHTML(p.name)} × ${p.qty}<br>Rs. ${money(p.price*p.qty)}</div>
+ <div><button class="small" onclick="changeQty(${p.id},-1)">−</button>
+ <button class="small" onclick="changeQty(${p.id},1)">+</button></div></div>`).join(""):"Your cart is empty.";
+ const message="Assalam-o-Alaikum Fawad Sports! My order:\n"+
+ cart.map(p=>`${p.name} x ${p.qty} = Rs. ${p.price*p.qty}`).join("\n")+
+ "\nTotal: Rs. "+cart.reduce((s,p)=>s+p.price*p.qty,0);
+ document.getElementById("whatsappOrder").href="https://wa.me/923405049439?text="+encodeURIComponent(message);
+}
+document.getElementById("checkout").addEventListener("submit",e=>{
+ e.preventDefault();
+ if(!cart.length){alert("Please add products to your cart first.");return}
+ const order={id:Date.now(),name:document.getElementById("customer").value,
+ phone:document.getElementById("phone").value,address:document.getElementById("address").value,
+ items:cart.map(p=>({...p})),total:cart.reduce((s,p)=>s+p.price*p.qty,0),date:new Date().toLocaleString()};
+ orders.unshift(order);save("fs_orders",orders);
+ alert("Demo order saved in this browser. Please confirm it via WhatsApp with the shop.");
+ const msg=`New Order - Fawad Sports\nName: ${order.name}\nPhone: ${order.phone}\nAddress: ${order.address}\n${order.items.map(p=>p.name+" x "+p.qty+" = Rs. "+p.price*p.qty).join("\n")}\nTotal: Rs. ${order.total}`;
+ window.open("https://wa.me/923405049439?text="+encodeURIComponent(msg),"_blank");
+ cart=[];save("fs_cart",cart);renderCart();e.target.reset();renderAdmin();
+});
+function adminLogin(){
+ const password=prompt("Demo admin password:");
+ if(password==="admin123"){
+ document.getElementById("admin").classList.remove("hidden");
+ renderAdmin();document.getElementById("admin").scrollIntoView({behavior:"smooth"});
+ }else if(password!==null)alert("Incorrect password.");
+}
+function adminLogout(){document.getElementById("admin").classList.add("hidden")}
+const imageInput=document.getElementById("pimage");
+const imagePreview=document.getElementById("imagePreview");
+imageInput.addEventListener("change",()=>{
+ const file=imageInput.files[0];
+ if(!file){imagePreview.removeAttribute("src");imagePreview.style.display="none";return;}
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)){
+   alert("Please select a JPG, PNG, or WebP image.");
+   imageInput.value="";imagePreview.style.display="none";return;
+ }
+ if(file.size>1.5*1024*1024){
+   alert("Image is too large. Please choose an image under 1.5 MB.");
+   imageInput.value="";imagePreview.style.display="none";return;
+ }
+ const reader=new FileReader();
+ reader.onload=()=>{imagePreview.src=reader.result;imagePreview.style.display="block";};
+ reader.readAsDataURL(file);
+});
+document.getElementById("addProduct").addEventListener("submit",e=>{
+ e.preventDefault();
+ const file=imageInput.files[0];
+ const addProductRecord=(imageData="")=>{
+   const product={id:Date.now(),name:document.getElementById("pname").value.trim(),
+   price:Number(document.getElementById("pprice").value),cat:document.getElementById("pcat").value,
+   emoji:document.getElementById("pemoji").value||"🏆"};
+   if(imageData) product.image=imageData;
+   products.push(product);
+   try{
+     save("fs_products",products);
+   }catch(err){
+     products.pop();
+     alert("Browser storage is full. Try a smaller image, or use cloud image storage for permanent uploads.");
+     return;
+   }
+   e.target.reset();imagePreview.removeAttribute("src");imagePreview.style.display="none";
+   renderProducts();renderAdmin();
+ };
+ if(file){
+   if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>1.5*1024*1024){
+     alert("Choose a JPG, PNG, or WebP image under 1.5 MB.");return;
+   }
+   const reader=new FileReader();
+   reader.onload=()=>addProductRecord(reader.result);
+   reader.onerror=()=>alert("Could not read this image. Please try another file.");
+   reader.readAsDataURL(file);
+ }else addProductRecord();
+});
+function deleteProduct(id){
+ if(!confirm("Delete this product?"))return;
+ products=products.filter(p=>p.id!==id);save("fs_products",products);
+ renderProducts();renderAdmin();
+}
+function renderAdmin(){
+ document.getElementById("adminProducts").innerHTML=products.map(p=>`
+ <div class="cart-item"><span>${p.image?`<img src="${p.image}" alt="" style="width:48px;height:48px;object-fit:cover;vertical-align:middle;border-radius:5px;margin-right:8px">`:''}${escapeHTML(p.name)} — Rs. ${money(p.price)}</span>
+ <button class="danger" onclick="deleteProduct(${p.id})">Delete</button></div>`).join("");
+ document.getElementById("orders").innerHTML=orders.length?orders.map(o=>`
+ <div class="panel"><strong>Order #${o.id}</strong><p>${escapeHTML(o.name)} · ${escapeHTML(o.phone)}</p>
+ <p>${escapeHTML(o.address)}</p><p>${o.items.map(p=>escapeHTML(p.name)+" x "+p.qty).join(", ")}</p>
+ <strong>Rs. ${money(o.total)}</strong><p class="note">${escapeHTML(o.date)}</p></div>`).join(""):"No saved orders.";
+}
+document.getElementById("year").textContent=new Date().getFullYear();
+renderProducts();renderCart();
+</script>
+</body>
+</html>
